@@ -47,7 +47,8 @@ server {
  # Add index.php to the list if you are using PHP
  index index.php index.html index.htm index.nginx-debian.html;
 
- server_name mlitvino.42.fr;
+# server_name ${DOMAIN_NAME};
+  server_name "${DOMAIN_NAME}";
 
  #location / {
   #proxy_pass http://localhost:80;

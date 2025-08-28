@@ -1,4 +1,4 @@
-FROM debian:12.11
+FROM debian:bookworm
 
 RUN apt update \
 	&& apt upgrade \
