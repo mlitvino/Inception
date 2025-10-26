@@ -5,12 +5,12 @@ services:
     ports:
       - "443:443"
     depends_on:
-      - wordpress
       - mariadb
+      - wordpress
     volumes:
       - ${HOST_WEB_DIR}:/var/www/html
     networks:
-      inception:
+      - inception
     restart: unless-stopped
 
   wordpress:
@@ -21,50 +21,39 @@ services:
     secrets:
       - admin_pass
       - user_pass
+      - mysql_user_pass
+    volumes:
+      - ${HOST_WEB_DIR}:/var/www/html
     depends_on:
       - mariadb
-    volumes:
-      - web:/var/www/html
     networks:
-      inception:
+      - inception
     restart: unless-stopped
 
   mariadb:
     build: requirements/mariadb
     container_name: mariadb
     secrets:
-      - mysql_user_pass
       - mysql_root_pass
+      - mysql_user_pass
     volumes:
       - db:/var/lib/mysql
     networks:
-      inception:
+      - inception
     restart: unless-stopped
-  
+
 networks:
   inception:
-    name: inception
 
 secrets:
   admin_pass:
-    file: ../secrets/admin_pass
+    file: ${SECRETS_DIR}/admin_pass
   user_pass:
-    file: ../secrets/user_pass
+    file: ${SECRETS_DIR}/user_pass
   mysql_root_pass:
-    file: ../secrets/mysql_root_pass
+    file: ${SECRETS_DIR}/mysql_root_pass
   mysql_user_pass:
-    file: ../secrets/mysql_user_pass
+    file: ${SECRETS_DIR}/mysql_user_pass
 
 volumes:
-  web:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${HOST_WEB_DIR}
   db:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${HOST_DB_DIR}
