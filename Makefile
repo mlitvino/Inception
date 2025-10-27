@@ -12,6 +12,7 @@ stop:
 
 clean:
 	docker compose -f srcs/docker-compose.yml down --rmi all --volumes --remove-orphans
+	docker network prune -f
 	sudo rm -rf /home/mlitvino/data/db /home/mlitvino/data/web
 
 re: clean all

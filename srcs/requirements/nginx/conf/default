@@ -48,7 +48,7 @@ server {
  index index.php index.html index.htm index.nginx-debian.html;
 
 # server_name ${DOMAIN_NAME};
-  server_name "${DOMAIN_NAME}";
+  server_name mlitvino.42.fr localhost;
 
  #location / {
   #proxy_pass http://localhost:80;
@@ -61,7 +61,7 @@ server {
 
  # pass PHP scripts to FastCGI server
  #
-
+ 
  location ~ [^/]\\.php(/|$) {
         try_files $uri =404;
         fastcgi_pass wordpress:9000;

@@ -5,10 +5,12 @@ services:
     ports:
       - "443:443"
     depends_on:
-      - mariadb
-      - wordpress
+      wordpress:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     volumes:
-      - ${HOST_WEB_DIR}:/var/www/html
+      - web:/var/www/html
     networks:
       - inception
     restart: unless-stopped
@@ -23,12 +25,19 @@ services:
       - user_pass
       - mysql_user_pass
     volumes:
-      - ${HOST_WEB_DIR}:/var/www/html
+      - web:/var/www/html
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     networks:
       - inception
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pidof php-fpm8.2 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   mariadb:
     build: requirements/mariadb
@@ -41,7 +50,13 @@ services:
     networks:
       - inception
     restart: unless-stopped
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      
 networks:
   inception:
 
@@ -57,3 +72,14 @@ secrets:
 
 volumes:
   db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mlitvino/data/db
+  web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mlitvino/data/web

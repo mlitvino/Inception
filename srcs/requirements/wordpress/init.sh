@@ -10,9 +10,14 @@ DB_NAME="${WP_DB_NAME:-wordpress}"
 DB_USER="${WP_DB_USER:-mlitvino}"
 DB_HOST="${DB_HOST:-mariadb}"
 
-curl -sS -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-./wp-cli.phar core download --allow-root
+if [ ! -f wp-cli.phar ]; then
+  curl -sS -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  chmod +x wp-cli.phar
+fi
+
+if [ ! -f wp-settings.php ]; then
+  ./wp-cli.phar core download --allow-root
+fi
 
 if [ ! -f wp-config.php ]; then
   ./wp-cli.phar config create \
