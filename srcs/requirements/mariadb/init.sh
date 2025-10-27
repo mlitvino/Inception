@@ -8,7 +8,6 @@ fi
 MYSQL_ROOT_PASS="$(cat /run/secrets/mysql_root_pass)"
 MYSQL_USER_PASS="$(cat /run/secrets/mysql_user_pass)"
 
-# escape single quotes in passwords for SQL
 esc() { printf "%s" "$1" | sed "s/'/''/g"; }
 ROOT_ESC="$(esc "$MYSQL_ROOT_PASS")"
 USER_ESC="$(esc "$MYSQL_USER_PASS")"
