@@ -1,7 +1,7 @@
 all: build run
 
 build:
-	mkdir -p /home/mlitvino/data/db /home/mlitvino/data/web
+	mkdir -p data/db data/web
 	docker compose -f srcs/docker-compose.yml build --parallel
 
 run:
@@ -18,7 +18,7 @@ down:
 clean:
 	docker compose -f srcs/docker-compose.yml down --rmi all --volumes
 	docker network prune -f
-	sudo rm -rf /home/mlitvino/data/db /home/mlitvino/data/web
+	sudo rm -rf data/db data/web
 
 re: clean all
 
